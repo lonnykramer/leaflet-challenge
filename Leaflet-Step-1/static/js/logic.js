@@ -13,20 +13,24 @@ d3.json('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojs
       var mag = feature.properties.mag;
       if (mag >= 4.0) {
         return {
-          color: "red"
+          color: "red",
+          fillOpacity: 1
         }; 
       }
       else if (mag >= 3.0) {
         return {
-          color: "orange"
+          color: "orange",
+          fillOpacity: 1
         };
       } else if (mag >= 2.0) {
         return {
-          color: "yellow"
+          color: "yellow",
+          fillOpacity: 1
         };
       } else {
         return {
-          color: "green"
+          color: "green",
+          fillOpacity: 1
         }
       }
     },
@@ -52,4 +56,39 @@ d3.json('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojs
       });
     },
   }).addTo(map);
+
+  // TRYING TO ADD A LEGEND
+
+  function getColor(d) {
+    return d === '4'  ? "#de2d26" :
+           d === '3'  ? "#377eb8" :
+           d === '2' ? "#4daf4a" :
+           d === '1' ? "#984ea3" :
+                        "#ff7f00";
+}
+
+
+  
+
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend');
+    labels = ['<strong>Categories</strong>'],
+    strength = ['5','4','3','2','1'];
+
+    for (var i = 0; i < strength.length; i++) {
+
+            div.innerHTML += 
+            labels.push(
+                '<i class="circle" style="background:' + getColor(strength[i]) + '"></i> ' +
+            (strength[i] ? strength[i] : '+'));
+
+        }
+        div.innerHTML = labels.join('<br>');
+    return div;
+    };
+    legend.addTo(map);
+
+
 });
