@@ -83,7 +83,35 @@ console.log("base map code finished");
 // };
 // d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", {style:style}).addTo(map);
 
+// *******************
+// Create a legend to display information about our map
+var legend = L.control({
+    position: 'fixed'
+});
+console.log("after bottomright"); // this prints
+// When the layer control is added, insert a div with the class of "legend"
+legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "legend");
+    return div;
+};
 
+console.log(map);
+// Add the info legend to the map
+legend.addTo(map);
+console.log("after legend.addTo(map)"); // this did not print
+
+document.querySelector(".legend").innerHTML = [
+    "<p>Earthquake Intensity</p>",
+    "<p>Magnitude 6.0+</p>",
+    "<p>Magnitude 5.0 - 5.9</p>",
+    "<p>Magnitude 4.0 - 4.9</p>",
+    "<p>Magnitude 3.0 - 3.9</p>",
+    "<p>Magnitude 2.0 - 2.9</p>",
+    "<p>Less than Magnitude 2.0</p>"
+].join("");
+
+
+// **************************
 function createMarkers(response) {
 
     // Pull the "features" property off of response.data
@@ -102,7 +130,7 @@ function createMarkers(response) {
         var feature = features[index];
         // console.log(feature);       // works
 
-        
+
         function chooseColor(feature) {
             var mag = feature.properties.mag;
             if (mag >= 6.0) {
