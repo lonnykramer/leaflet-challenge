@@ -60,16 +60,16 @@ function createMap(earthquakes) {
 }
 console.log("base map code finished");
 
-function getColor(d) {
-    return d > 7 ? '#800026' :
-        d > 6 ? '#BD0026' :
-        d > 5 ? '#E31A1C' :
-        d > 4 ? '#FC4E2A' :
-        d > 3 ? '#FD8D3C' :
-        d > 2 ? '#FEB24C' :
-        d > 1 ? '#FED976' :
-                '#FFEDA0';
-}
+// function getColor(d) {
+//     return d > 7 ? '#800026' :
+//         d > 6 ? '#BD0026' :
+//         d > 5 ? '#E31A1C' :
+//         d > 4 ? '#FC4E2A' :
+//         d > 3 ? '#FD8D3C' :
+//         d > 2 ? '#FEB24C' :
+//         d > 1 ? '#FED976' :
+//                 '#FFEDA0';
+// }
 
 // function style(feature) {
 //     return {
@@ -80,7 +80,8 @@ function getColor(d) {
 //         dashArray: '3',
 //         fillOpacity: 0.7
 //     }
-// }
+// };
+// d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", {style:style}).addTo(map);
 
 
 function createMarkers(response) {
@@ -91,7 +92,7 @@ function createMarkers(response) {
     //console.log(features[1])        // works
     // data comes from https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson
 
-    // Initialize an array to hold bike markers
+    // Initialize an array to hold quake markers
     var quakeMarkers = [];
 
     // console.log("right before for loop");       // works
@@ -100,76 +101,80 @@ function createMarkers(response) {
     for (var index = 0; index < features.length; index++) {
         var feature = features[index];
         // console.log(feature);       // works
-   
-        // function chooseColor(feature) {
-        //         return {
-        //             fillColor: black, //getColor(features.properties.mag),
-        //             weight: 2,
-        //             opacity: 1,
-        //             color: 'white',
-        //             dashArray: '3',
-        //             fillOpacity: 0.7
-        //         }
-        //     }
 
+        
         function chooseColor(feature) {
             var mag = feature.properties.mag;
-            if (mag >= 4.0) {
-                return {
-                    color: "red",
-                    fillOpacity: 1
-                };
+            if (mag >= 6.0) {
+                return "darkred";
+            }
+            else if (mag >= 5.0) {
+                return "red";
+            }
+            else if (mag >= 4.0) {
+                return "orange";
             }
             else if (mag >= 3.0) {
-                return {
-                  color: "orange",
-                  fillOpacity: 1
-                };
-            } else if (mag >= 2.0) {
-                return {
-                  color: "yellow",
-                  fillOpacity: 1
-                };
-            } else {
-                return {
-                  color: "green",
-                  fillOpacity: 1
-                }
+                return "yellow";
             }
-        }
+            else if (mag >= 2.0) {
+                return "green";
+            }
+            else {
+                return "lightgreen";
+            }
+        };
 
 
 
+        // var legend = L.control({position: 'bottomright'});
+        // legend.onAdd = function (map) {
 
-        
+        // var div = L.DomUtil.create('div', 'info legend');
+        // labels = ['<strong>Categories</strong>'],
+        // strength = ['5','4','3','2','1'];
+
+        // for (var i = 0; i < strength.length; i++) {
+
+        //         div.innerHTML += 
+        //         labels.push(
+        //             '<i class="circle" style="background:' + getColor(strength[i]) + '"></i> ' +
+        //         (strength[i] ? strength[i] : '+'));
+
+        // }
+        //     div.innerHTML = labels.join('<br>');
+        // return div;
+        // };
+        // legend.addTo(map);
+
+
         // console.log("right before quakeMarker");        // works
-        
+
         // For each feature, create a marker and bind a popup with the feature's info
         // var quakeMarker = L.marker([feature.geometry.coordinates[1], feature.geometry.coordates[0]])
         // var quakeMarker = L.marker([feature.geometry.coordinates[1],feature.geometry.coordinates[0]])
-        var quakeMarker = L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0], chooseColor])
-
+        var quakeMarker = L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], { color: chooseColor(feature) })
             // var quakeMarker = L.marker([19.844, -155.371])      // manual coordinates work
             .bindPopup("<h3>Location: " + feature.properties.place + "<h3><h3>Magnitude: " + feature.properties.mag + "<h3>Felt: " +
                 feature.properties.felt + "<h3>Coordinates: " + feature.geometry.coordinates[1] + ", " + feature.geometry.coordinates[0] +
-                 "<br><a href='" + feature.properties.url + "'>Add'l Details</a>")
+                "<br><a href='" + feature.properties.url + "'>Add'l Details</a>")
             // .setRadius(50); // try a function in here to evaluate size
             .setRadius(Math.round(feature.properties.mag) * 10)
-        
-            // Add the marker to the quakeMarkers array
-            quakeMarkers.push(quakeMarker);
-        }
-
-        // Create a layer group made from the bike markers array, pass it into the createMap function
-        createMap(L.layerGroup(quakeMarkers));
+        // .fillColor("red")
+        // Add the marker to the quakeMarkers array
+        quakeMarkers.push(quakeMarker);
     }
 
+    // Create a layer group made from the bike markers array, pass it into the createMap function
+    createMap(L.layerGroup(quakeMarkers));
+}
 
-    // Perform an API call to the USGS API to get earthquake information. Call createMarkers when complete
-    // d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", createMarkers);
+
+// Perform an API call to the USGS API to get earthquake information. Call createMarkers when complete
+// d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", createMarkers);
 
 
 
-    d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", createMarkers);
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", createMarkers);
 
 
