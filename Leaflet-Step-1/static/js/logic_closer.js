@@ -79,6 +79,7 @@ console.log("after legend.addTo(map)"); // this did not print
 
 document.querySelector(".legend").innerHTML = [
     "<p class='title'>Earthquake Intensity</p>",
+    "<p class='dash'>--------------------</p>",
     "<p class='six'>Magnitude 6.0+</p>",
     "<p class='five'>Magnitude 5.0 - 5.9</p>",
     "<p class='four'>Magnitude 4.0 - 4.9</p>",
