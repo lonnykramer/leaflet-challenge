@@ -78,13 +78,13 @@ legend.addTo(map);
 console.log("after legend.addTo(map)"); // this did not print
 
 document.querySelector(".legend").innerHTML = [
-    "<p>Earthquake Intensity</p>",
-    "<p>Magnitude 6.0+</p>",
-    "<p>Magnitude 5.0 - 5.9</p>",
-    "<p>Magnitude 4.0 - 4.9</p>",
-    "<p>Magnitude 3.0 - 3.9</p>",
-    "<p>Magnitude 2.0 - 2.9</p>",
-    "<p>Less than Magnitude 2.0</p>"
+    "<p class='title'>Earthquake Intensity</p>",
+    "<p class='six'>Magnitude 6.0+</p>",
+    "<p class='five'>Magnitude 5.0 - 5.9</p>",
+    "<p class='four'>Magnitude 4.0 - 4.9</p>",
+    "<p class='three'>Magnitude 3.0 - 3.9</p>",
+    "<p class='two'>Magnitude 2.0 - 2.9</p>",
+    "<p class='undertwo'>Less than Magnitude 2.0</p>"
 ].join("");
 
 
