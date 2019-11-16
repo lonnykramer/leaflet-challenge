@@ -32,12 +32,20 @@ function createMap(earthquakes) {
         accessToken: API_KEY
     });
 
+    var comicmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox.comic",
+        accessToken: API_KEY
+    });
+
     // Create a baseMaps object to hold the lightmap layer
     var baseMaps = {
         "Light Map": lightmap,
         "Dark Map": darkmap,
         "Satellite": satellitemap,
-        "Outdoors": outdoorsmap
+        "Outdoors": outdoorsmap,
+        "Comic": comicmap
     };
 
     // Create an overlayMaps object to hold the bikeStations layer
@@ -55,41 +63,41 @@ function createMap(earthquakes) {
 
     // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
     L.control.layers(baseMaps, overlayMaps, {
-        collapsed: false
+        collapsed: true
     }).addTo(map);
 
 
     // *******************
-// Create a legend to display information about our map
-var legend = L.control({
-    position: 'bottomright'
-});
-console.log("after bottomleft"); // this prints
-// When the layer control is added, insert a div with the class of "legend"
-legend.onAdd = function () {
-    var div = L.DomUtil.create("div", "legend");
+    // Create a legend to display information about our map
+    var legend = L.control({
+        position: 'bottomright'
+    });
+    console.log("after bottomleft"); // this prints
+    // When the layer control is added, insert a div with the class of "legend"
+    legend.onAdd = function () {
+        var div = L.DomUtil.create("div", "legend");
+        // console.log(map);
+        return div;
+    };
+
     console.log(map);
-    return div;
-};
+    // Add the info legend to the map
+    legend.addTo(map);
+    // console.log("after legend.addTo(map)"); // this works
 
-console.log(map);
-// Add the info legend to the map
-legend.addTo(map);
-console.log("after legend.addTo(map)"); // this did not print
-
-document.querySelector(".legend").innerHTML = [
-    "<p class='title'>Earthquake Intensity</p>",
-    "<p class='dash'>--------------------</p>",
-    "<p class='six'>Magnitude 6.0+</p>",
-    "<p class='five'>Magnitude 5.0 - 5.9</p>",
-    "<p class='four'>Magnitude 4.0 - 4.9</p>",
-    "<p class='three'>Magnitude 3.0 - 3.9</p>",
-    "<p class='two'>Magnitude 2.0 - 2.9</p>",
-    "<p class='undertwo'>Less than Magnitude 2.0</p>"
-].join("");
+    document.querySelector(".legend").innerHTML = [
+        "<p class='title'>Earthquake Intensity</p>",
+        "<p class='dash'>--------------------</p>",
+        "<p class='six'>Magnitude 6.0+</p>",
+        "<p class='five'>Magnitude 5.0 - 5.9</p>",
+        "<p class='four'>Magnitude 4.0 - 4.9</p>",
+        "<p class='three'>Magnitude 3.0 - 3.9</p>",
+        "<p class='two'>Magnitude 2.0 - 2.9</p>",
+        "<p class='undertwo'>Less than Magnitude 2.0</p>"
+    ].join("");
 
 
-// **************************
+    // **************************
 
 
 }
